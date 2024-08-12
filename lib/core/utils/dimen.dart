@@ -1,1 +1,1 @@
-const double paddingBody = 20;
+const double paddingBody = 16;
