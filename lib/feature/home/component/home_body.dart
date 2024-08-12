@@ -39,22 +39,25 @@ class HomeBody extends StatelessWidget {
             height: paddingBody,
           ),
         ),
-        SliverGrid(
-          delegate: SliverChildBuilderDelegate(
-            childCount: products.length,
-                (context, index) {
-              return _allProduct(
-                products[index],
-                context,
-              );
-            },
-          ),
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            crossAxisSpacing: paddingBody,
-            mainAxisExtent:
-            MediaQuery.of(context).size.width * 0.7 - 2 * paddingBody,
-            mainAxisSpacing: paddingBody / 2,
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: paddingBody/2),
+          sliver: SliverGrid(
+            delegate: SliverChildBuilderDelegate(
+              childCount: products.length,
+                  (context, index) {
+                return _allProduct(
+                  products[index],
+                  context,
+                );
+              },
+            ),
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: paddingBody,
+              mainAxisExtent:
+              MediaQuery.of(context).size.width * 0.7 - 2 * paddingBody,
+              mainAxisSpacing: paddingBody / 2,
+            ),
           ),
         ),
       ],
