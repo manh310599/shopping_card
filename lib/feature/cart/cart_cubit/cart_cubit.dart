@@ -21,12 +21,12 @@ class CartCubit extends Cubit<CartState> {
 
     emit(CartLoaded(
       products: listShoppingCard ?? [],
-      total: shoppingCardDemo.fold(
-          0, (total, e) => total + e.product.price! * e.quantity),
+      total: listShoppingCard?.fold(
+          0, (total, e) => total! + e.product.price! * e.quantity) ?? 0,
     ));
   }
 
-  void changeQuality(String id, int quantity) {
+  void changeQuality(int id, int quantity) {
     final products = (state as CartLoaded)
         .products
         .map((e) {
@@ -40,6 +40,8 @@ class CartCubit extends Cubit<CartState> {
         .cast<ShoppingCard>()
         .toList();
 
+    repo.updateShoppingCard(db, id, quantity);
+
     emit(
       (state as CartLoaded).copyWith(
         products: products,
@@ -49,12 +51,12 @@ class CartCubit extends Cubit<CartState> {
     );
   }
 
-  void removeProduct(String id) {
+  Future<void> removeProduct(int id) async {
     final products =
         (state as CartLoaded).products.where((e) => e.id != id).toList();
 
     final newTotal = calculateTotalPrice(products);
-
+    await repo.deleteShoppingCard(db, id);
     emit(
       CartLoaded(products: products, total: newTotal),
     );
@@ -70,4 +72,6 @@ class CartCubit extends Cubit<CartState> {
   order() {
     repo.clearShoppingCart(db);
   }
+
+
 }

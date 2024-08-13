@@ -58,6 +58,7 @@ Widget _listProduct(BuildContext context, CartLoaded state) {
       itemBuilder: (context, index) {
         final e = state.products[index];
         return Card(
+          color: Colors.white,
           child: Padding(
             padding: const EdgeInsets.all(paddingBody),
             child: AppCardProduct(
@@ -70,15 +71,15 @@ Widget _listProduct(BuildContext context, CartLoaded state) {
                 hot: e.product.hot,
               ),
               quantity: e.quantity,
-             onValueChanged: (value) {
+              onValueChanged: (value) {
                 context.read<CartCubit>().changeQuality(
-                      e.id as String,
+                      e.id!,
                       value,
                     );
               },
               onTapRemove: () {
                 context.read<CartCubit>().removeProduct(
-                      e.id as String,
+                      e.id!,
                     );
               },
             ),
@@ -92,7 +93,17 @@ Widget _listProduct(BuildContext context, CartLoaded state) {
 }
 
 Widget _totalPrice(BuildContext context, CartLoaded state) {
-  return Padding(
+  return Container(
+    decoration: BoxDecoration(
+      border: Border.fromBorderSide(
+        BorderSide(
+
+          color: Colors.grey.withOpacity(0.5),
+          width: 2,
+          style: BorderStyle.solid,
+        ),
+      ),
+    ),
     padding: const EdgeInsets.all(paddingBody / 2),
     child: Column(
       mainAxisSize: MainAxisSize.min,
@@ -114,18 +125,19 @@ Widget _totalPrice(BuildContext context, CartLoaded state) {
         const SizedBox(
           height: paddingBody,
         ),
-        state.products.isNotEmpty ?AppButton.normalButton(
-          context: context,
-          text: 'Order',
-          onPressed: () {
-            context.read<CartCubit>().order();
-            AppDialog.orderSuccessfully(context);
-          },
-        ) : AppButton.offButton(
-          context: context,
-          text: 'Order',
-
-        ),
+        state.products.isNotEmpty
+            ? AppButton.normalButton(
+                context: context,
+                text: 'Order',
+                onPressed: () {
+                  context.read<CartCubit>().order();
+                  AppDialog.orderSuccessfully(context);
+                },
+              )
+            : AppButton.offButton(
+                context: context,
+                text: 'Order',
+              ),
       ],
     ),
   );

@@ -128,6 +128,7 @@ class _AppCardProductState extends State<AppCardProduct> {
                                 currentValue = result;
                                 money =
                                     currentValue * (widget.product.price ?? 0);
+                                widget.onValueChanged?.call(currentValue);
                               });
                             }
                           },

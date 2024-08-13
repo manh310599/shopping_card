@@ -36,9 +36,9 @@ class ShoppingRepo extends IShoppingRepo {
 
   @override
   Future<List<ShoppingCard>?> getShoppingCards(Database db) async {
-    final List<Map<String, dynamic>?>? maps = await db.query('shopping_cart');
+    final List<Map<String, dynamic>?> maps = await db.query('shopping_cart');
 
-    if (maps == null || maps.isEmpty) {
+    if (maps.isEmpty) {
       return null;
     }
 
@@ -49,17 +49,18 @@ class ShoppingRepo extends IShoppingRepo {
 
 
   @override
-  Future<int> updateShoppingCard(Database db, ShoppingCard card) async {
-    return await db.update(
+  Future<void> updateShoppingCard(Database db, int id, int quantity) async {
+     await db.update(
       'shopping_cart',
-      card.toJson(),
+      {'quantity': quantity},
       where: 'id = ?',
-      whereArgs: [card.id],
+      whereArgs: [id],
     );
   }
 
+
   @override
-  Future<int> deleteShoppingCard(Database db, String id) async {
+  Future<int> deleteShoppingCard(Database db, int id) async {
     return await db.delete(
       'shopping_cart',
       where: 'id = ?',

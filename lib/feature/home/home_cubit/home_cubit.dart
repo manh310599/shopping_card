@@ -15,11 +15,11 @@ class HomeCubit extends Cubit<HomeState> {
 
   init() async {
     db = await DatabaseHelper.instance.database;
-    final listShoppingCard = await repo.getShoppingCards(db);
+
 
     Future.delayed(
       const Duration(seconds: 1),
-      () {
+      () async {
         emit(HomeLoaded(
           hotProducts: products
               .where(
@@ -27,21 +27,38 @@ class HomeCubit extends Cubit<HomeState> {
               )
               .toList(),
           products: products,
-          shoppingCart: listShoppingCard ?? [],
+          shoppingCart: await getShoppingCard() ?? [],
         ));
       },
     );
   }
 
+  Future<List<ShoppingCard>?> getShoppingCard() async {
+    final listShoppingCard = await repo.getShoppingCards(db);
+
+
+    return listShoppingCard;
+  }
+
+  backToHome() async {
+
+    final result =  await getShoppingCard();
+    emit(
+      (state as HomeLoaded).copyWith(
+        shoppingCart: result ?? [],
+      ),
+    );
+  }
+
   void addProductToCart(Product product, int quantity) async {
-    repo.insertShoppingCard(
+    await repo.insertShoppingCard(
         db, ShoppingCard( product: product, quantity: quantity));
 
-    final listShoppingCard = await repo.getShoppingCards(db);
+    final result =  await getShoppingCard();
 
     emit(
       (state as HomeLoaded).copyWith(
-        shoppingCart: listShoppingCard,
+        shoppingCart: result ?? [],
       ),
     );
   }

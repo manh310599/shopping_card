@@ -6,9 +6,9 @@ abstract class IShoppingRepo {
 
   Future<List<ShoppingCard>?> getShoppingCards(Database db);
 
-  Future<int> updateShoppingCard(Database db, ShoppingCard card);
+  Future<void> updateShoppingCard(Database db, int id,int quantity);
 
-  Future<int> deleteShoppingCard(Database db, String id);
+  Future<void> deleteShoppingCard(Database db, int id);
 
   Future<void> clearShoppingCart(Database db);
 }

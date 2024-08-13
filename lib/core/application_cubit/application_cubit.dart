@@ -4,6 +4,4 @@ import 'package:shoppingcart/core/utils/app_theme.dart';
 
 class ApplicationCubit extends Cubit<ApplicationState> {
   ApplicationCubit() : super(ApplicationState(themeData: AppTheme.orangeTheme));
-
-
 }

@@ -11,6 +11,8 @@ class AppTheme {
     iconTheme: const IconThemeData(
       color: Colors.white,
     ),
-
+    cardTheme: const CardTheme(
+      color: Colors.white,
+    ),
   );
 }
