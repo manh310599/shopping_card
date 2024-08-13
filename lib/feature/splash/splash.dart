@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:shoppingcart/gen/app_image.dart';
 
-class Splash extends StatelessWidget {
+class Splash extends StatefulWidget {
   const Splash({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<Splash> createState() => _SplashState();
+}
+
+class _SplashState extends State<Splash> {
+  @override
+  void initState() {
+    super.initState();
     Future.delayed(
       const Duration(seconds: 3),
-      () {
-        Navigator.pushReplacementNamed(context, '/home');
+          () {
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/home');
+        }
       },
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Image.asset(
@@ -20,9 +32,11 @@ class Splash extends StatelessWidget {
           height: 100,
         ),
       ),
-      floatingActionButton: const SizedBox(height: 100,child: Text('© 2023, QSoft. All rights reserved.',)),
+      floatingActionButton: const SizedBox(
+        height: 100,
+        child: Text('© 2023, QSoft. All rights reserved.'),
+      ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-
     );
   }
 }

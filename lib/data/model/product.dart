@@ -1,16 +1,18 @@
 import 'package:shoppingcart/gen/app_image.dart';
 
 class Product {
+  final String? id;
   final String? name;
   final String? description;
   final int? price;
   final String? image;
   final bool? hot;
 
-  Product({this.name, this.description, this.price, this.image, this.hot});
+  Product( {this.id,this.name, this.description, this.price, this.image, this.hot});
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
+      id: json['id'],
       name: json['name'],
       description: json['description'],
       price: json['price'],
@@ -21,6 +23,7 @@ class Product {
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'name': name,
       'description': description,
       'price': price,
@@ -32,6 +35,7 @@ class Product {
 
 List<Product> products = [
   Product(
+    id: '1',
     name: 'Product 0',
     description: 'Description 0',
     price: 100,
@@ -39,6 +43,7 @@ List<Product> products = [
     hot: true,
   ),
   Product(
+    id: '2',
     name: 'Product 1',
     description: 'Description 1',
     price: 200,
@@ -46,6 +51,7 @@ List<Product> products = [
     hot: false,
   ),
   Product(
+    id: '3',
     name: 'Product 2',
     description: 'Description 2',
     price: 300,
@@ -53,6 +59,7 @@ List<Product> products = [
     hot: true,
   ),
   Product(
+    id: '4',
     name: 'Product 3',
     description: 'Description 3',
     price: 400,
@@ -60,6 +67,7 @@ List<Product> products = [
     hot: false,
   ),
   Product(
+    id: '5',
     name: 'Product 4',
     description: 'Description 4',
     price: 500,
@@ -67,6 +75,7 @@ List<Product> products = [
     hot: true,
   ),
   Product(
+    id: '6',
     name: 'Product 5',
     description: 'Description 5',
     price: 600,
@@ -74,6 +83,7 @@ List<Product> products = [
     hot: false,
   ),
   Product(
+    id: '7',
     name: 'Product 6',
     description: 'Description 6',
     price: 700,
@@ -81,6 +91,7 @@ List<Product> products = [
     hot: true,
   ),
   Product(
+    id: '8',
     name: 'Product 7',
     description: 'Description 7',
     price: 800,
@@ -88,6 +99,7 @@ List<Product> products = [
     hot: false,
   ),
   Product(
+    id: '9',
     name: 'Product 8',
     description: 'Description 8',
     price: 900,
@@ -95,6 +107,7 @@ List<Product> products = [
     hot: true,
   ),
   Product(
+    id: '10',
     name: 'Product 9',
     description: 'Description 9',
     price: 1000,
