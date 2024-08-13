@@ -72,4 +72,24 @@ class AppDialog {
 
     return result ?? 1;
   }
+
+  static void orderSuccessfully(BuildContext context){
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Center(child: Text('Order successfully')),
+          actions: [
+            AppButton.normalButton(
+              context: context,
+              text: 'Back to Home',
+              onPressed: () {
+                Navigator.popUntil(context, (route) => route.isFirst,);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

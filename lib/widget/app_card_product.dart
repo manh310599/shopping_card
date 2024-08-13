@@ -6,27 +6,52 @@ import '../core/utils/app_dialog.dart';
 import '../core/utils/dimen.dart';
 
 class AppCardProduct extends StatefulWidget {
-  const AppCardProduct({super.key, required this.product});
+  const AppCardProduct(
+      {super.key,
+      required this.product,
+      this.quantity,
 
+      this.onTapRemove, this.onValueChanged});
+
+  final int? quantity;
   final Product product;
+
+  final VoidCallback? onTapRemove;
+  final Function(int)? onValueChanged;
 
   @override
   State<AppCardProduct> createState() => _AppCardProductState();
 }
 
 class _AppCardProductState extends State<AppCardProduct> {
-
   int currentValue = 1;
   int money = 0;
+
   @override
   void initState() {
     money = widget.product.price ?? 0;
     super.initState();
+    if (widget.quantity != null) {
+      currentValue = widget.quantity!;
+      money = currentValue * (widget.product.price ?? 0);
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didUpdateWidget(AppCardProduct oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
+    if (widget.product != oldWidget.product || widget.quantity != oldWidget.quantity) {
+      setState(() {
+        currentValue = widget.quantity ?? 1;
+        money = currentValue * (widget.product.price ?? 0);
+      });
+    }
+  }
+
+
+  @override
+  Widget build(BuildContext context) {
     return Row(
       children: [
         ClipRRect(
@@ -51,8 +76,7 @@ class _AppCardProductState extends State<AppCardProduct> {
               children: [
                 Text(
                   widget.product.name ?? '',
-                  style: Theme
-                      .of(context)
+                  style: Theme.of(context)
                       .textTheme
                       .headlineSmall
                       ?.copyWith(fontWeight: FontWeight.bold),
@@ -82,6 +106,7 @@ class _AppCardProductState extends State<AppCardProduct> {
                                   currentValue--;
                                   money = (currentValue *
                                       (widget.product.price ?? 0));
+
                                 }
                               });
                             },
@@ -101,7 +126,8 @@ class _AppCardProductState extends State<AppCardProduct> {
                             if (result != 0) {
                               setState(() {
                                 currentValue = result;
-                                money = currentValue * (widget.product.price ?? 0);
+                                money =
+                                    currentValue * (widget.product.price ?? 0);
                               });
                             }
                           },
@@ -140,6 +166,8 @@ class _AppCardProductState extends State<AppCardProduct> {
                                   currentValue++;
                                   money = currentValue *
                                       (widget.product.price ?? 0);
+
+                                  widget.onValueChanged?.call(currentValue);
                                 }
                               });
                             },
@@ -161,6 +189,7 @@ class _AppCardProductState extends State<AppCardProduct> {
           height: 100,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Container(
                 decoration: BoxDecoration(
@@ -170,9 +199,10 @@ class _AppCardProductState extends State<AppCardProduct> {
                   ),
                 ),
                 child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+                  onPressed: widget.onTapRemove ??
+                      () {
+                        Navigator.pop(context);
+                      },
                   icon: const Icon(
                     Icons.close,
                     color: Colors.black,
@@ -180,15 +210,9 @@ class _AppCardProductState extends State<AppCardProduct> {
                 ),
               ),
               Text(
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .titleLarge
-                    ?.copyWith(
+                style: Theme.of(context).textTheme.titleLarge?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Theme
-                        .of(context)
-                        .primaryColor),
+                    color: Theme.of(context).primaryColor),
                 '$money đ̲',
               ),
             ],

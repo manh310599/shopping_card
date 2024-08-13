@@ -2,12 +2,12 @@ import 'package:shoppingcart/data/model/product.dart';
 import 'package:shoppingcart/gen/app_image.dart';
 
 class ShoppingCard {
-  final String id;
+  final int? id;
   final Product product;
   final int quantity;
 
   ShoppingCard({
-    required this.id,
+     this.id,
     required this.product,
     required this.quantity,
   });
@@ -15,23 +15,46 @@ class ShoppingCard {
   factory ShoppingCard.fromJson(Map<String, dynamic> json) {
     return ShoppingCard(
       id: json['id'],
-      product: Product.fromJson(json['product']),
+      product: Product(
+        id: json['productId'].toString(),
+        name: json['name'],
+        description: json['description'],
+        price: json['price'],
+        image: json['image'],
+      ),
       quantity: json['quantity'],
     );
   }
 
+
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'product': product.toJson(),
+      'productId': product.id,
+      'name': product.name,
+      'description': product.description,
+      'price': product.price,
+      'image': product.image,
       'quantity': quantity,
     };
+  }
+
+
+  copyWith({
+    int? id,
+    Product? product,
+    int? quantity,
+  }) {
+    return ShoppingCard(
+      id: id ?? this.id,
+      product: product ?? this.product,
+      quantity: quantity ?? this.quantity,
+    );
   }
 }
 
 final shoppingCardDemo = [
   ShoppingCard(
-    id: '1',
+    id: 1,
     product: Product(
       id: '1',
       name: 'Product 1',
@@ -43,7 +66,7 @@ final shoppingCardDemo = [
     quantity: 1,
   ),
   ShoppingCard(
-    id: '2',
+    id: 2,
     product: Product(
       id: '2',
       name: 'Product 2',
@@ -55,7 +78,7 @@ final shoppingCardDemo = [
     quantity: 2,
   ),
   ShoppingCard(
-    id: '3',
+    id: 3,
     product: Product(
       id: '3',
       name: 'Product 3',
@@ -67,7 +90,7 @@ final shoppingCardDemo = [
     quantity: 3,
   ),
   ShoppingCard(
-    id: '4',
+    id: 4,
     product: Product(
       id: '4',
       name: 'Product 4',
@@ -79,7 +102,7 @@ final shoppingCardDemo = [
     quantity: 4,
   ),
   ShoppingCard(
-    id: '5',
+    id: 5,
     product: Product(
       id: '5',
       name: 'Product 5',
@@ -91,7 +114,7 @@ final shoppingCardDemo = [
     quantity: 5,
   ),
   ShoppingCard(
-    id: '6',
+    id: 6,
     product: Product(
       id: '6',
       name: 'Product 6',

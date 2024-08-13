@@ -27,4 +27,28 @@ class AppButton {
       ),
     );
   }
+
+  static Widget offButton({
+    required BuildContext context,
+    required String text,
+
+
+  }) {
+    return Container(
+      height: 60,
+      decoration: BoxDecoration(
+        color: Colors.grey,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Center(
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+  }
 }

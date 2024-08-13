@@ -31,6 +31,24 @@ class Product {
       'hot': hot,
     };
   }
+
+  copyWith({
+    String? id,
+    String? name,
+    String? description,
+    int? price,
+    String? image,
+    bool? hot,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      image: image ?? this.image,
+      hot: hot ?? this.hot,
+    );
+  }
 }
 
 List<Product> products = [
@@ -48,7 +66,7 @@ List<Product> products = [
     description: 'Description 1',
     price: 200,
     image: AppImage.product_1,
-    hot: false,
+    hot: true,
   ),
   Product(
     id: '3',
@@ -64,7 +82,7 @@ List<Product> products = [
     description: 'Description 3',
     price: 400,
     image: AppImage.product_3,
-    hot: false,
+    hot: true,
   ),
   Product(
     id: '5',
@@ -80,7 +98,7 @@ List<Product> products = [
     description: 'Description 5',
     price: 600,
     image: AppImage.product_5,
-    hot: false,
+    hot: true,
   ),
   Product(
     id: '7',

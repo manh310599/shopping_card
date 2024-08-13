@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shoppingcart/core/utils/dimen.dart';
 import 'package:shoppingcart/data/model/product.dart';
+import 'package:shoppingcart/feature/home/home_cubit/home_cubit.dart';
 
 import '../../../core/utils/app_bottom_sheet.dart';
 
@@ -9,6 +11,7 @@ class HomeBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
     return CustomScrollView(
       slivers: <Widget>[
         const SliverToBoxAdapter(
@@ -24,13 +27,14 @@ class HomeBody extends StatelessWidget {
         ),
         SliverToBoxAdapter(
           child: SizedBox(
-            height: MediaQuery.of(context).size.width * 0.7 -
+            height: MediaQuery.of(context).size.width * 0.4 -
                 2 * paddingBody -
                 paddingBody / 2,
             child: ListView(
-                scrollDirection: Axis.horizontal,
-                shrinkWrap: true,
-                children: _hotProduct(context)),
+              scrollDirection: Axis.horizontal,
+              shrinkWrap: true,
+              children: _hotProduct(context),
+            ),
           ),
         ),
         _title(context, 'ALL Products'),
@@ -40,11 +44,11 @@ class HomeBody extends StatelessWidget {
           ),
         ),
         SliverPadding(
-          padding: const EdgeInsets.symmetric(horizontal: paddingBody/2),
+          padding: const EdgeInsets.symmetric(horizontal: paddingBody / 2),
           sliver: SliverGrid(
             delegate: SliverChildBuilderDelegate(
               childCount: products.length,
-                  (context, index) {
+              (context, index) {
                 return _allProduct(
                   products[index],
                   context,
@@ -52,10 +56,11 @@ class HomeBody extends StatelessWidget {
               },
             ),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
+              crossAxisCount: width > 600 ? 4 : 2,
               crossAxisSpacing: paddingBody,
-              mainAxisExtent:
-              MediaQuery.of(context).size.width * 0.7 - 2 * paddingBody,
+              mainAxisExtent: width > 600
+                  ? width * 0.34 - 4 * paddingBody
+                  : width * 0.7 - 2 * paddingBody,
               mainAxisSpacing: paddingBody / 2,
             ),
           ),
@@ -64,7 +69,6 @@ class HomeBody extends StatelessWidget {
     );
   }
 }
-
 
 Widget _allProduct(Product product, BuildContext context) {
   return Card(
@@ -109,7 +113,10 @@ Widget _allProduct(Product product, BuildContext context) {
                 icon: const Icon(Icons.add_shopping_cart),
                 color: Theme.of(context).primaryColor,
                 onPressed: () {
-                  AppBottomSheet.buyProduct(context, product);
+                  AppBottomSheet.buyProduct(context, product,(value) {
+
+                    context.read<HomeCubit>().addProductToCart(product, value);
+                  },);
                 },
               ),
             ],
@@ -127,9 +134,9 @@ Widget _title(BuildContext context, String title) {
       child: Text(
         title,
         style: Theme.of(context).textTheme.titleLarge?.copyWith(
-          color: Theme.of(context).primaryColor,
-          fontWeight: FontWeight.bold,
-        ),
+              color: Theme.of(context).primaryColor,
+              fontWeight: FontWeight.bold,
+            ),
       ),
     ),
   );
@@ -140,35 +147,35 @@ List<Widget> _hotProduct(BuildContext context) {
       .where((element) => element.hot == true)
       .expand(
         (e) => <Widget>[
-      const SizedBox(width: paddingBody / 2),
-      Stack(
-        alignment: Alignment.topLeft,
-        children: [
-          _cardHost(e, context),
-          Container(
-            margin: const EdgeInsets.all(paddingBody / 2),
-            decoration: BoxDecoration(
-              color: Theme.of(context).cardColor,
-              shape: BoxShape.circle,
-            ),
-            child: const Text(
-              '🔥',
-            ),
-          )
+          const SizedBox(width: paddingBody / 2),
+          Stack(
+            alignment: Alignment.topLeft,
+            children: [
+              _cardHost(e, context),
+              Container(
+                margin: const EdgeInsets.all(paddingBody / 2),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).cardColor,
+                  shape: BoxShape.circle,
+                ),
+                child: const Text(
+                  '🔥',
+                ),
+              )
+            ],
+          ),
+          const SizedBox(width: paddingBody / 2),
         ],
-      ),
-      const SizedBox(width: paddingBody / 2),
-    ],
-  )
+      )
       .toList();
 }
 
 Widget _cardHost(Product product, BuildContext context) {
+  final width = MediaQuery.of(context).size.width;
   return SizedBox(
-    width: (MediaQuery.of(context).size.width -
-        2 * paddingBody -
-        paddingBody / 2) *
-        0.4,
+    width: width <= 600
+        ? (width - 2 * paddingBody - paddingBody / 2) * 0.4
+        : (width - 3 * paddingBody - paddingBody / 2) * 0.2857,
     child: Card(
       color: Theme.of(context).cardColor,
       clipBehavior: Clip.antiAlias,
@@ -211,7 +218,9 @@ Widget _cardHost(Product product, BuildContext context) {
                   icon: const Icon(Icons.add_shopping_cart),
                   color: Theme.of(context).primaryColor,
                   onPressed: () {
-                    AppBottomSheet.buyProduct(context, product);
+                    AppBottomSheet.buyProduct(context, product,(value) {
+                      context.read<HomeCubit>().addProductToCart(product, value);
+                    },);
                   },
                 ),
               ],
